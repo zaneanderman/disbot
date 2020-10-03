@@ -69,7 +69,7 @@ async def code(ctx, *args):
 	for chunk in brokencontents:
 		await ctx.author.send(chunk)
 	await ctx.author.send("Dependencies: all imported modules, python 3, possibly linux")
-	await ctx.send("I have dm'ed you my source code. Feel free to use it.")
+	await ctx.send("I have dm'ed you my source code. Feel free to use it. Alternatively, you can view the bot on github at https://github.com/zaneanderman/disbot")
 
 @bot.command()
 async def whoami(ctx):
