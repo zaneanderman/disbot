@@ -8,7 +8,7 @@ bot = commands.Bot(command_prefix='~')
 
 @bot.command()
 async def ping(ctx):
-	await ctx.send('pong')
+	await ctx.send(str(bot.latency) + " milliseconds")
 
 @bot.command()
 async def calculate(ctx, *args):
@@ -23,20 +23,33 @@ def read(filename):
 		returnvalue = x.read()
 	return returnvalue
 
+def num(number):
+	if int(number) == float(number):
+		return int(number)
+	else:
+		return float(number)
+
 async def Calculate(ctx, *args):
-	try:
-		if args[0] == "+":
-			returnvalue = int(args[1]) + int(args[2])
-		elif args[0] == "*":
-			returnvalue = int(args[1]) * int(args[2])	
-		elif args[0] == "/":
-			returnvalue = int(args[1]) / int(args[2])
-		elif args[0] == "-":
-			returnvalue = int(args[1]) - int(args[2])
-		else:
-			returnvalue = "That's not a valid calculation! Syntax: \n~calculate [operater] [number 1] [number 2]"
-	except TypeError:
-		returnvalue = "That's not a valid calculation! Syntax: \n~calculate [operater] [number 1] [number 2]"
+	if args[1] in ["+","-","*","/","&","^","**",] and (isinstance(num(args[0]), int) or isinstance(num(args[0]), float)) and (isinstance(num(args[2]), int) or isinstance(num(args[2]), float)):
+		if args[1] == "+":
+			returnvalue = num(args[0]) + num(args[2])
+		if args[1] == "*":
+			returnvalue = num(args[0]) * num(args[2])
+		if args[1] == "/":
+			returnvalue = num(args[0]) / num(args[2])
+		if args[1] == "-":
+			returnvalue = num(args[0]) - num(args[2])
+		if args[1] == "**":
+			returnvalue = num(args[0]) ** num(args[2])
+		if args[1] == "&":
+			returnvalue = num(args[0]) & num(args[2])
+		if args[1] == "^":
+			returnvalue = num(args[0]) ^ num(args[2])
+
+	elif args[1] == "help":
+		returnvalue = "This help page is currently unavailable. Look at the code to find out how to use this command."
+	else:
+		returnvalue = "That's not a valid calculation! Syntax: \n~calculate ([number 1] [operater] [number 2]) | help"
 	await ctx.send(returnvalue)
 
 @bot.command()
@@ -57,6 +70,14 @@ async def updatetext(ctx, text:str):
 	with open("savetext.txt", "w") as file:
 		file.write(text)
 	await ctx.send("Updated text file! \nThe previous text was: %s"%previousvalue)
+
+@bot.command()
+async def echo(ctx, *args):
+	sendstring = ""
+	for i in args:
+		print(i)
+		sendstring = sendstring + "%s "%i 
+	await ctx.send(sendstring)
 
 @bot.command()
 async def invite(ctx):
