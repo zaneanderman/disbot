@@ -30,26 +30,38 @@ def num(number):
 		return float(number)
 
 async def Calculate(ctx, *args):
-	if args[1] in ["+","-","*","/","&","^","**",] and (isinstance(num(args[0]), int) or isinstance(num(args[0]), float)) and (isinstance(num(args[2]), int) or isinstance(num(args[2]), float)):
-		if args[1] == "+":
+	try:
+		if args[0] == "help":
+			returnvalue = """
+			Syntax: ~calculate [num1] [operator] [num2]
+			Operators:
+				+: num1 plus num2
+				*: num1 times num2
+				/: num1 divided by num2
+				-: num1 minus num2
+				**: num1 to the power of num2
+				&: num1 bitwise and num2
+				^: num1 bitwise xor num2
+			"""
+		elif args[1] == "+":
 			returnvalue = num(args[0]) + num(args[2])
-		if args[1] == "*":
+		elif args[1] == "*":
 			returnvalue = num(args[0]) * num(args[2])
-		if args[1] == "/":
+		elif args[1] == "/":
 			returnvalue = num(args[0]) / num(args[2])
-		if args[1] == "-":
+		elif args[1] == "-":
 			returnvalue = num(args[0]) - num(args[2])
-		if args[1] == "**":
+		elif args[1] == "**":
 			returnvalue = num(args[0]) ** num(args[2])
-		if args[1] == "&":
+		elif args[1] == "&":
 			returnvalue = num(args[0]) & num(args[2])
-		if args[1] == "^":
+		elif args[1] == "^":
 			returnvalue = num(args[0]) ^ num(args[2])
 
-	elif args[1] == "help":
-		returnvalue = "This help page is currently unavailable. Look at the code to find out how to use this command."
-	else:
-		returnvalue = "That's not a valid calculation! Syntax: \n~calculate ([number 1] [operater] [number 2]) | help"
+		else:
+			returnvalue = "That's not a valid calculation! Syntax: \n~calculate ([num1] [operator] [num2]) | help"
+	except (TypeError, IndexError):
+		returnvalue = "That's not a valid calculation! Syntax: \n~calculate ([num1] [operator] [num2]) | help"
 	await ctx.send(returnvalue)
 
 @bot.command()
@@ -75,7 +87,6 @@ async def updatetext(ctx, text:str):
 async def echo(ctx, *args):
 	sendstring = ""
 	for i in args:
-		print(i)
 		sendstring = sendstring + "%s "%i 
 	await ctx.send(sendstring)
 
