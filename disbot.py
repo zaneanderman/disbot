@@ -8,8 +8,7 @@ bot = commands.Bot(command_prefix='~')
 
 @bot.command()
 async def ping(ctx):
-	#await ctx.send(f"{bot.latency} milliseconds")
-	await ctx.send("the ping command is currently offline")
+	await ctx.send(f"{int(bot.latency*1000)} ms")
 
 @bot.command()
 async def calculate(ctx, *args):
