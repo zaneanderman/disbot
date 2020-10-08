@@ -8,7 +8,8 @@ bot = commands.Bot(command_prefix='~')
 
 @bot.command()
 async def ping(ctx):
-	await ctx.send(str(bot.latency) + " milliseconds")
+	#await ctx.send(f"{bot.latency} milliseconds")
+	await ctx.send("the ping command is currently offline")
 
 @bot.command()
 async def calculate(ctx, *args):
@@ -69,10 +70,9 @@ async def whois(ctx, user:str):
 	message = ""
 	for person in ctx.guild.members:
 		if person.display_name.lower().find(user.lower()) != -1:
-			message = message+"id: "+str(person)+", "+"server name: "+person.display_name+"\n"
+			message = f"{message}id: {person}, server name: {person.display_name}\n"
 	if message != "":
-		await ctx.author.send(message)
-		await ctx.send("I have dm'ed you the id's of all users who's names contain that string")
+		await ctx.send(message)
 	else:
 		await ctx.send("There is no user of that name!")
 
@@ -81,13 +81,13 @@ async def updatetext(ctx, text:str):
 	previousvalue = read("savetext.txt")
 	with open("savetext.txt", "w") as file:
 		file.write(text)
-	await ctx.send("Updated text file! \nThe previous text was: %s"%previousvalue)
+	await ctx.send(f"Updated text file! \nThe previous text was: {previousvalue}")
 
 @bot.command()
 async def echo(ctx, *args):
 	sendstring = ""
 	for i in args:
-		sendstring = sendstring + "%s "%i 
+		sendstring = f"{sendstring} {i}" 
 	await ctx.send(sendstring)
 
 @bot.command()
