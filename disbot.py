@@ -103,6 +103,11 @@ async def code(ctx, *args):
 	await ctx.send("I have dm'ed you my source code. Feel free to use it. Alternatively, you can view the bot on github at https://github.com/zaneanderman/disbot")
 
 @bot.command()
+async def chocolate(ctx):
+	await ctx.send("The bot eats some chocolate and leaves none for you")
+
+
+@bot.command()
 async def whoami(ctx):
 	await ctx.send(ctx.author)
 
