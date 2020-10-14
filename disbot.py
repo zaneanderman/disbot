@@ -3,8 +3,11 @@
 import discord
 from discord.ext import commands
 import sys
+import os
+from modules import calc 
 
 bot = commands.Bot(command_prefix='~')
+nsp = calc.NumericStringParser()
 
 @bot.command()
 async def ping(ctx):
@@ -30,39 +33,8 @@ def num(number):
 		return float(number)
 
 async def Calculate(ctx, *args):
-	try:
-		if args[0] == "help":
-			returnvalue = """
-			Syntax: ~calculate [num1] [operator] [num2]
-			Operators:
-				+: num1 plus num2
-				*: num1 times num2
-				/: num1 divided by num2
-				-: num1 minus num2
-				**: num1 to the power of num2
-				&: num1 bitwise and num2
-				^: num1 bitwise xor num2
-			"""
-		elif args[1] == "+":
-			returnvalue = num(args[0]) + num(args[2])
-		elif args[1] == "*":
-			returnvalue = num(args[0]) * num(args[2])
-		elif args[1] == "/":
-			returnvalue = num(args[0]) / num(args[2])
-		elif args[1] == "-":
-			returnvalue = num(args[0]) - num(args[2])
-		elif args[1] == "**":
-			returnvalue = num(args[0]) ** num(args[2])
-		elif args[1] == "&":
-			returnvalue = num(args[0]) & num(args[2])
-		elif args[1] == "^":
-			returnvalue = num(args[0]) ^ num(args[2])
-
-		else:
-			returnvalue = "That's not a valid calculation! Syntax: \n~calculate ([num1] [operator] [num2]) | help"
-	except (TypeError, IndexError):
-		returnvalue = "That's not a valid calculation! Syntax: \n~calculate ([num1] [operator] [num2]) | help"
-	await ctx.send(returnvalue)
+	calculation = "".join(args)
+	await ctx.send(nsp.eval(calculation))
 
 @bot.command()
 async def whois(ctx, user:str):
@@ -106,15 +78,9 @@ async def code(ctx, *args):
 async def chocolate(ctx):
 	await ctx.send("The bot eats some chocolate and leaves none for you")
 
-
 @bot.command()
 async def whoami(ctx):
 	await ctx.send(ctx.author)
-
-
-
-
-
 
 token = read("./token.txt")
 bot.run(token)
