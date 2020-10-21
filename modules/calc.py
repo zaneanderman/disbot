@@ -52,9 +52,11 @@ class NumericStringParser(object):
         div = Literal("/")
         lpar = Literal("(").suppress()
         rpar = Literal(")").suppress()
-        addop = plus | minus
+        bitop = Literal("^")
+        addop = plus | minus | bitop
         multop = mult | div
-        expop = Literal("^")
+        expop = Literal("**")
+        
         pi = CaselessLiteral("PI")
         expr = Forward()
         atom = ((Optional(oneOf("- +")) +
@@ -81,11 +83,13 @@ class NumericStringParser(object):
                     "-": operator.sub,
                     "*": operator.mul,
                     "/": operator.truediv,
-                    "^": operator.pow}
+                    "**": operator.pow,
+                    "^": lambda a, b: int(a) ^ int(b)}
         self.fn = {"sin": math.sin,
                    "cos": math.cos,
                    "tan": math.tan,
                    "exp": math.exp,
+                   "sqrt": math.sqrt,
                    "abs": abs,
                    "trunc": lambda a: int(a),
                    "round": round,
@@ -95,7 +99,7 @@ class NumericStringParser(object):
         op = s.pop()
         if op == 'unary -':
             return -self.evaluateStack(s)
-        if op in "+-*/^":
+        if op in ["+","-","*","/","^", "**"]:
             op2 = self.evaluateStack(s)
             op1 = self.evaluateStack(s)
             return self.opn[op](op1, op2)
